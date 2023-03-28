@@ -1,0 +1,50 @@
+﻿@page "/order-create"
+@page "/order-create/{id:int}"
+
+@inject IOrderClientService OrderClientService
+@inject NavigationManager NavigationManager
+
+@if (IsLoading)
+{
+    <div class="spinner"></div>
+}
+else
+{
+
+    <div class="border border-dark rounded-3 p-3 " style="background-color:aliceblue">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5>Order Information</h5>
+            <button type="button" @onclick="AddWindow" class="btn btn-sm btn-success">Add Window</button>
+        </div>
+        <EditForm Model="@Order" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="container row my-3">
+                <div class="col-md-3">
+                    <label for="input1" class="form-label">Name:</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" @bind-value="@Order.Name" />
+                </div>
+                <div class="col-md-3">
+                    <label for="input1" class="form-label">State:</label>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" @bind-value="@Order.State" />
+                </div>
+            </div>
+
+
+
+            @foreach (var window in Order.Windows)
+            {
+                <WindowComponent Order="Order" Window="window" OnRemoveWindow="RemoveWindow" OnAddSubElement="AddSubElement" OnRemoveSubElement="RemoveSubElement" />
+            }
+
+            <button type="submit" class="btn btn-sm btn-primary me-1">@btnText</button>
+            <button class="btn btn-sm btn-info" @onclick="() => Close()">Close</button>
+        </EditForm>
+    </div>
+}
+

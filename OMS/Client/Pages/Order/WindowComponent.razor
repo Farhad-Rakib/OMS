@@ -1,0 +1,65 @@
+﻿@inject IOrderClientService OrderClientService
+@inject NavigationManager NavigationManager
+
+@if (IsLoadingWindow)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="border rounded mb-3">
+    @if (ShowWinodwConfirmation)
+    {
+        <div class="modal" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.1)">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="close" @onclick="HideConfirmationDialog">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                          Delete this Window!!!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="HideConfirmationDialog">Cancel</button>
+                        <button type="button" class="btn btn-danger" @onclick="RemoveWindow">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+        <div class="d-flex justify-content-between align-items-center text-primary px-3 py-2" style="background-color:lavender">
+            <h5 class="mb-0">Window</h5>
+            <div>
+                <button type="button" @onclick="AddSubElement" class="btn btn-sm btn-success">Add Subelement</button>
+                <button type="button" @onclick="ShowConfirmationDialog" class="btn btn-sm btn-danger">Remove</button>
+            </div>
+        </div>
+
+        <div class="container row my-3">
+            <div class="col-md-3">
+                <label for="input1" class="form-label">Name:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" @bind-value="@Window.Name" />
+            </div>
+            <div class="col-md-3">
+                <label for="input1" class="form-label">Quantity:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control" @bind-value="@Window.Quantity" min="0" oninput="this.value = Math.abs(this.value)" />
+            </div>
+
+            @foreach (var subElement in Window.SubElements)
+            {
+                <SubElementComponent SubElement="subElement" OnRemoveSubElement="RemoveSubElement" />
+            }
+        </div>
+
+    </div>
+
+ }
+
